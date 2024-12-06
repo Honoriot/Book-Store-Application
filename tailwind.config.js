@@ -8,9 +8,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        'primary' : '#FFCE1A',
+        'secondary' : '#0D0842',
+        'bgcolor' : '#F3F3F3',
+        'favourite' : '#FF5841'
       },
+      fontFamily : {
+        'primary' : ["Montserrat", 'sans-serif'],
+        'secondary' : ["Nunito Sans", 'sans-serif']
+      }
     },
   },
   plugins: [],
