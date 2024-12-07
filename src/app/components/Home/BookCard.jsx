@@ -1,8 +1,18 @@
+'use client'
+import { addToCart } from "@/app/redux/features/cart/cartSlice";
+import { useDispatch } from "react-redux";
 import Image from "next/image";
 import Link from "next/link";
 import {FiShoppingCart} from 'react-icons/fi'
 
+
 export default function BookCard({book}){
+  const dispatch = useDispatch()
+
+  const handleAddToCart = (product) =>{
+    dispatch(addToCart(product))
+  }
+
     return (
         <div className="rounded-lg transition-shadow duration-300">
         <div
@@ -31,7 +41,7 @@ export default function BookCard({book}){
           <p className="font-medium mb-5">
             ${book?.newPrice} <span className="line-through font-normal ml-2">${book?.oldPrice}</span>
           </p>
-          <button className="btn-primary px-6 space-x-1 flex items-center gap-1 ">
+          <button className="btn-primary px-6 space-x-1 flex items-center gap-1" onClick={() => handleAddToCart(book)}>
             <FiShoppingCart className="" />
             <span>Add to Cart</span>
           </button>

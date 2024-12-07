@@ -45,7 +45,7 @@ export default function ProfileAvater() {
   const handleAvatarClick = () => {
     setIsDropDownOpen(!isDropDownOpen);
   };
-  const currentUser = true;
+  const currentUser = false;
 
   return (
     <div>

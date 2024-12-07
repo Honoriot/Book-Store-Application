@@ -1,12 +1,14 @@
+'use client'
 import Link from "next/link"
 import {RiMenu2Fill} from "react-icons/ri"
 import {IoSearch} from "react-icons/io5"
 import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import ProfileAvater from "./ProfileAvater";
+import { useSelector } from "react-redux";
 
 export default function Navbar(){
-
+    const cartCount = useSelector((state)=>state.cart.cartItems)
     return <>
         <header className="max-w-screen-2xl mx-auto px-4 py-6">
             <nav className="flex justify-between items-center">
@@ -22,7 +24,7 @@ export default function Navbar(){
                     <button className="hidden sm:block"><FaRegHeart className="size-6" /></button>
                     <Link href='/cart' className="bg-primary p-1 sm:px-6 px-2 flex items-center rounded-md" >
                         <MdOutlineShoppingCart />
-                        <span className="text-sm font-semibold sm:ml-1">0</span>
+                        <span className="text-sm font-semibold sm:ml-1">{cartCount.length>0 ? cartCount.length : 0}</span>
                     </Link>
                 </div>
             </nav>
