@@ -1,26 +1,25 @@
 'use client'
 import { useEffect, useRef, useState } from "react";
 import BookSwipper from "./Swipper";
+import { useFetchAllBooksQuery } from "@/app/redux/features/books/books.api";
 
-const catagory = ["Choose a Genre", "Business", "Fiction", "Horror", "Adventure"]
+const catagory = ["Choose a genre", "Business", "Fiction", "Horror", "Adventure"]
 
 export default function TopSeller(){
-    const [books, setBooks] = useState([])
-    const [filterBook, setFilterBook] = useState([])
+    const {data, isLoading} = useFetchAllBooksQuery()
+    const [selectedCategory, setSelecteCategory] = useState("Choose a genre")
     const bookSelectCatagory = useRef()
-
-    useEffect(()=>{
-        fetch("/books.json")
-        .then(res=>res.json())
-        .then(data=>{setBooks(data), setFilterBook(data)})
-    }, [])
+    let filteredBooks;
     
+    if(!isLoading){
+        filteredBooks = selectedCategory === "Choose a genre" ? data?.books : data?.books.filter(book => book.category === selectedCategory.toLowerCase())
+    }else{
+        filteredBooks = []
+    }
 
     const handleCatagoryChange = ()=>{
         const chooseCatagory = bookSelectCatagory.current.value
-        const filterBook = chooseCatagory==catagory[0] ? books : books.filter(book=>book.category==chooseCatagory.toLowerCase())
-        console.log(filterBook)
-        setFilterBook(filterBook)
+        setSelecteCategory(chooseCatagory)
     }
 
     return (
@@ -34,7 +33,7 @@ export default function TopSeller(){
             </select>
         </div>
         <div>
-            <BookSwipper books={filterBook} />
+            {isLoading ? <div>Loading...</div> : <BookSwipper books={filteredBooks} />}
         </div>
     </div>
     );

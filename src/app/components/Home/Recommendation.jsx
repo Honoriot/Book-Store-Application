@@ -1,19 +1,11 @@
 'use client'
 import { useEffect, useState } from "react";
 import BookSwipper from "./Swipper";
+import { useFetchTrendingBooksQuery } from "@/app/redux/features/books/books.api";
 
 
 export default function RecommendationSection(){
-    const [books, setBooks] = useState([]);
-    useEffect(()=>{
-        async function fetchBook () { 
-            const book = await fetch('/books.json')
-            const data = await book.json()
-            setBooks(data.slice(0, 10))
-         }
-         fetchBook()
-    })
-
+    const {data: books = [], isLoading} = useFetchTrendingBooksQuery()
 
     return (
         <div className="py-10">
@@ -22,7 +14,8 @@ export default function RecommendationSection(){
        
         </div>
         <div>
-            <BookSwipper books={books} />
+            {console.log(books)}
+            {isLoading ? <div>Loading...</div> : <BookSwipper books={books?.books} />}
         </div>
     </div>
     );

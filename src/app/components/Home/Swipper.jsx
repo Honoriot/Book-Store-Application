@@ -7,6 +7,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 export default function BookSwipper({books}){
+  console.log('bookSwipper:', books)
     return (
         <Swiper
         slidesPerView={1}

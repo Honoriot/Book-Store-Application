@@ -1,16 +1,9 @@
 'use client'
-import { useEffect, useState } from "react";
-import NewsCard from "./NewsCard";
 import NewsSwipper from "./NewsSwipper";
+import { useFetchAllNewsQuery } from "@/app/redux/features/books/news.api";
 
 export default function News(){
-    const [news, setNews] = useState([])
-    
-    useEffect(()=>{
-        fetch('/news.json')
-        .then(news=>news.json())
-        .then(data=>setNews(data))
-    })
+    const {data: news = [], isLoading} = useFetchAllNewsQuery()
 
     return (
         <div>
@@ -18,7 +11,7 @@ export default function News(){
                 News
             </div>
             <div>
-                <NewsSwipper news={news} />
+                {isLoading ? <div>Loading...</div> : <NewsSwipper news={news?.news} />}
             </div>
         </div>
     );

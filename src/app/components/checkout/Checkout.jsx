@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function CheckOut() {
     const cartItems = useSelector(state => state.cart.cartItems)
@@ -14,7 +14,24 @@ export default function CheckOut() {
         watch, 
         formState: {errors}} = useForm();
     
-        const [isChecked, setInChecked] = useState(false);
+    const [isChecked, setInChecked] = useState(false);
+    const checkBox = useRef()
+    const onSubmit = (data) => {
+      const newOrder = {
+        name: data.name,
+        email: currentUser?.email,
+        address: {
+          city: data.city,
+          country: data.country,
+          state: data.state,
+          zipcode: data.zipcode
+        },
+        phone: data.phone,
+        productIds: cartItems.map(item=>item._id),
+        totalPrice: totalPrice
+      }
+      console.log(newOrder)
+    }
 
   return (
     <section>
@@ -195,6 +212,10 @@ export default function CheckOut() {
                     <div className="md:col-span-5 mt-3">
                       <div className="inline-flex items-center">
                         <input
+                        ref={checkBox}
+                        onChange={()=>{
+                          setInChecked(checkBox.current.value)
+                        }}
                           type="checkbox"
                           name="billing_same"
                           id="billing_same"
