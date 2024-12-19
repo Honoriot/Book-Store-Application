@@ -1,7 +1,10 @@
 import CheckOut from "../components/checkout/Checkout";
+import { PrivateRoute } from "../private/private.route";
 
 export default function CheckOutPage(){
     return (
-        <div><CheckOut /></div>
+        <PrivateRoute>
+            <div><CheckOut /></div>
+        </PrivateRoute>
     );
 }

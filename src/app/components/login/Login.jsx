@@ -3,14 +3,31 @@ import Link from "next/link";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
+import { useAuth } from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Login(){
     const {register, handleSubmit, watch, formState: {errors}} = useForm()
-    const [errorMessage, setErrorMessage] = useState('')
+    const [message, setMessage] = useState('')
+    const {loginUser, signInWithGoogle} = useAuth()
+    const router = useRouter()
 
-    const onSubmit = (data) => console.log(data)
-    const googleSignIn = () => {
-        
+    const onSubmit = async (data) => {
+        console.log(data)
+        try {
+            await loginUser(data.email, data.password)
+            router.push('/')
+        } catch (error) {
+            setMessage("Please provide a valid email and [password")
+        }
+    }
+    const handleGoogleSignIn = async () => {
+        try {
+            await signInWithGoogle()
+            router.push('/')
+        } catch (error) {
+            setMessage('Google login failed')
+        }
     }
 
     return (
@@ -31,7 +48,7 @@ export default function Login(){
                         type="password" name="password" id="password" placeholder="password" className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-gray-500 "/>
                     </div>
                     {
-                        errorMessage && <p className="text-red-500 text-xs italic mb-3">{errorMessage}</p>
+                        message && <p className="text-red-500 text-xs italic mb-3">{message}</p>
                     }
                     <div>
                         <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-4 py-1 rounded focus:outline-none cursor-pointer">Login</button>
@@ -44,7 +61,7 @@ export default function Login(){
                 {/*Google Signin*/}
                 <div>
                     <button
-                    onClick={googleSignIn} 
+                    onClick={handleGoogleSignIn} 
                     className="bg-secondary w-full flex flex-wrap items-center justify-center rounded text-white align-middle hover:bg-blue-800 py-1 focus:outline-none gap-1">
                         <FaGoogle className="inline-block mr-2" /> Sign in with google
                     </button>

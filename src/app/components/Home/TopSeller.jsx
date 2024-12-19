@@ -6,7 +6,7 @@ import { useFetchAllBooksQuery } from "@/app/redux/features/books/books.api";
 const catagory = ["Choose a genre", "Business", "Fiction", "Horror", "Adventure"]
 
 export default function TopSeller(){
-    const {data, isLoading} = useFetchAllBooksQuery()
+    const {data, isLoading, isError, error} = useFetchAllBooksQuery()
     const [selectedCategory, setSelecteCategory] = useState("Choose a genre")
     const bookSelectCatagory = useRef()
     let filteredBooks;
@@ -34,6 +34,7 @@ export default function TopSeller(){
         </div>
         <div>
             {isLoading ? <div>Loading...</div> : <BookSwipper books={filteredBooks} />}
+            {isError ? <div>{error}</div> : <div></div>}
         </div>
     </div>
     );

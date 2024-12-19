@@ -3,11 +3,15 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import { useAuth } from "@/app/context/AuthContext";
+import { useCreateOrderMutation } from "@/app/redux/features/orders/order.api";
 
 export default function CheckOut() {
     const cartItems = useSelector(state => state.cart.cartItems)
     const totalPrice = cartItems.reduce((t, c)=> c.newPrice+t, 0).toFixed(2);
-    const currentUser = true;
+    // const currentUser = true;
+    const [createOrder, {isLoading, isError}] = useCreateOrderMutation()
+    const {currentUser} = useAuth()
     const {
         register, 
         handleSubmit, 
@@ -16,7 +20,7 @@ export default function CheckOut() {
     
     const [isChecked, setInChecked] = useState(false);
     const checkBox = useRef()
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       const newOrder = {
         name: data.name,
         email: currentUser?.email,
@@ -27,10 +31,14 @@ export default function CheckOut() {
           zipcode: data.zipcode
         },
         phone: data.phone,
-        productIds: cartItems.map(item=>item._id),
         totalPrice: totalPrice
       }
-      console.log(newOrder)
+      // console.log(newOrder)
+      try {
+        const orderStatus = await createOrder(data)
+      } catch (error) {
+        console.error("Error creating on order placing: ", error.message)
+      }
     }
 
   return (
